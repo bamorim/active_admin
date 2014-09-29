@@ -83,7 +83,7 @@ module ActiveAdmin
         end
 
         def belongs_to_names
-          required_belongs_to.map{|bc| bc.target.resource_name.singular }
+          required_belongs_to.map{|bc| bc.relationship_name }
         end
 
         def required_belongs_to

@@ -121,7 +121,9 @@ module ActiveAdmin
       this_belongs_to = Resource::BelongsTo.new(self, target, options)
       self.navigation_menu_name = target unless this_belongs_to.optional?
       belongs_to_config << this_belongs_to
-      controller.send :belongs_to, target, options.dup
+      controller.send :belongs_to, target, options.dup.select do |k,v|
+        [:class_name, :parent_class, :instance_name, :param, :finder, :route_name, :collection_name, :singleton, :polymorphic, :optional, :shallow].include? k.to_sym
+      end
     end
 
     def belongs_to_config

@@ -24,6 +24,10 @@ module ActiveAdmin
           namespace.resources[@target_name.to_s.camelize]
       end
 
+      def relationship_name
+        @options[:relationship_name] || target.resource_name.singular
+      end
+
       def namespace
         @owner.namespace
       end
