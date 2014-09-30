@@ -25,7 +25,11 @@ module ActiveAdmin
       end
 
       def relationship_name
-        @options[:relationship_name] || target.resource_name.singular
+        @options[:relationship_name] || name
+      end
+
+      def name
+        target.resource_name.singular
       end
 
       def namespace

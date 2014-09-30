@@ -69,7 +69,7 @@ module ActiveAdmin
 
         # @return params to pass to instance path
         def route_instance_params(instance)
-          belongs_to_names.reverse.reduce([instance]) do |arr,name| 
+          belongs_to_relationships.reverse.reduce([instance]) do |arr,name| 
             arr + [arr.last.public_send(name)]
           end.map{|i| i.to_param }.reverse
         end
@@ -82,8 +82,12 @@ module ActiveAdmin
           !required_belongs_to.empty?
         end
 
-        def belongs_to_names
+        def belongs_to_relationships
           required_belongs_to.map{|bc| bc.relationship_name }
+        end
+
+        def belongs_to_names
+          required_belongs_to.map{|bc| bc.name }
         end
 
         def required_belongs_to
