@@ -7,8 +7,6 @@ require File.expand_path 'spec/support/detect_rails_version', File.dirname(__FIL
 rails_version = detect_rails_version
 gem 'rails', rails_version
 
-gem 'arbre', github: 'gregbell/arbre' # until gregbell/arbre#16 makes it into an official release
-
 # Optional dependencies
 gem 'cancan'
 gem 'devise'
@@ -19,9 +17,11 @@ gem 'pundit'
 gem 'rake', require: false
 gem 'parallel_tests'
 
+# Debugging
+gem 'pry'                  # Easily debug from your console with `binding.pry`
+
 group :development do
   # Debugging
-  gem 'pry'                # Easily debug from your console with `binding.pry`
   gem 'better_errors'      # Web UI to debug exceptions. Go to /__better_errors to access the latest one
   gem 'binding_of_caller'  # Retrieve the binding of a method's caller in MRI Ruby >= 1.9.2
 
@@ -30,7 +30,7 @@ group :development do
   gem 'flamegraph'         # Flamegraph visualiztion: ?pp=flamegraph
 
   # Documentation
-  gem 'yard', github: 'lsegal/yard' # Documentation generator (until lsegal/yard#765 is in a release)
+  gem 'yard'               # Documentation generator
   gem 'redcarpet'          # Markdown implementation (for yard)
 end
 
@@ -46,7 +46,9 @@ group :test do
   gem 'launchy'
   gem 'rails-i18n' # Provides default i18n for many languages
   gem 'rspec'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.1.0'
+  gem 'i18n-spec'
   gem 'shoulda-matchers'
   gem 'sqlite3'
+  gem 'poltergeist'
 end

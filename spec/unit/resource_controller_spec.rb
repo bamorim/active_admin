@@ -224,36 +224,42 @@ describe Admin::PostsController, type: "controller" do
 
   describe "performing batch_action" do
     let(:controller){ Admin::PostsController.new }
+    let(:batch_action) { ActiveAdmin::BatchAction.new :flag, "Flag", &batch_action_block }
+    let(:batch_action_block) { proc { } }
     before do
-      batch_action = ActiveAdmin::BatchAction.new :flag, "Flag" do
-        redirect_to collection_path
-      end
-
       allow(controller.class.active_admin_config).to receive(:batch_actions).and_return([batch_action])
     end
 
     describe "when params batch_action matches existing BatchAction" do
+      before do
+        allow(controller).to receive(:params) { { batch_action: "flag", collection_selection: ["1"] } }
+      end
+
       it "should call the block with args" do
-        skip # dont know how to check if the block was called
+        expect(controller).to receive(:instance_exec).with(["1"], {})
+        controller.batch_action
+      end
+
+      it "should call the block in controller scope" do
+        expect(controller).to receive(:render_in_context).with(controller, nil).and_return({})
+        controller.batch_action
       end
     end
 
     describe "when params batch_action doesn't match a BatchAction" do
       it "should raise an error" do
-        skip # doesn't pass when running whole spec suite (WTF)
-
+        allow(controller).to receive(:params) { { batch_action: "derp", collection_selection: ["1"] } }
         expect {
-          post(:batch_action, batch_action: "derp", collection_selection: ["1"])
+          controller.batch_action
         }.to raise_error("Couldn't find batch action \"derp\"")
       end
     end
 
     describe "when params batch_action is blank" do
       it "should raise an error" do
-        skip # doesn't pass when running whole spec suite (WTF)
-
+        allow(controller).to receive(:params) { { collection_selection: ["1"] } }
         expect {
-          post(:batch_action, collection_selection: ["1"])
+          controller.batch_action
         }.to raise_error("Couldn't find batch action \"\"")
       end
     end
